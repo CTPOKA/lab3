@@ -39,7 +39,7 @@ int main()
 			}
 			str += "|\n";
 		}
-		printf(str.c_str());
+		printf("%s",str.c_str());
 		printf("\n Сумма диагональных элементов матрицы: %d", fun(arr));
 		printf("\nПродолжить? (y/n)\n");
 		cin >> answ;
@@ -51,9 +51,9 @@ int fun(int* arr)
 {
 
 	int res = 0;
-	__asm(
-	R"(mov eax, 0
-		mov ebx, arr[0][0]
+	__asm__ __volatile__(
+		R"(mov eax, 0
+		mov ebx, %1
 		mov ecx, n
 		mov edx, 0
 
@@ -74,8 +74,9 @@ int fun(int* arr)
 			jmp _loop
 			_end :
 
-		mov res, eax
-			)");
+		mov %0, eax
+			)"
+                                : "=r" (res), "=r" (arr));
 }
 
 
