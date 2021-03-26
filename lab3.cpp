@@ -76,7 +76,7 @@ int fun(int* arr)
 
 		mov %0, eax
 			)"
-                                : "=r" (res), "=r" (arr));
+                                : "=r" (res), "r" (arr));
 }
 
 
