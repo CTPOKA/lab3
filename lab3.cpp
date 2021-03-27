@@ -52,9 +52,11 @@ int fun(int* arr)
 
 	int res = 0;
 	__asm__ __volatile__(
-		R"(mov eax, 0
+		R"(
+		.intel_syntax noprefix
+		mov eax, 0
 		mov ebx, %1
-		mov ecx, n
+		mov ecx, %2
 		mov edx, 0
 
 		_loop:
@@ -66,17 +68,20 @@ int fun(int* arr)
 			add eax, dword ptr[ebx + edx * 4]
 			_skip:
 		add ecx, edx
-			add ebx, n
-			add ebx, n
-			add ebx, n
-			add ebx, n
+			add ebx, %2
+			add ebx, %2
+			add ebx, %2
+			add ebx, %2
 			inc edx
 			jmp _loop
 			_end :
 
 		mov %0, eax
 			)"
-                                : "=r" (res), "r" (arr));
+                                : "=r" (res) 
+                                : "r" (arr), "r" (n)
+                                );
+	return res;
 }
 
 
